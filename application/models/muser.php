@@ -41,4 +41,20 @@ class Muser extends CI_model{
 		}
         
     }
+
+    public function get_user($email, $password){
+        $this->db->from('tb_user');
+        $this->db->where('email', $email);
+        $this->db->where('password', $password);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
+
+    public function get_dokter($username, $password){
+    	$this->db->from('tb_dokter');
+        $this->db->where('username', $username);
+        $this->db->where('password', $password);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 }
