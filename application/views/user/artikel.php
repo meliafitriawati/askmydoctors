@@ -118,7 +118,7 @@
         <h5 class="judul-tab pg-pertanyaan">Artikel Terbaru</h5>
         <?php
           if ($this->session->userdata('hak_akses')==2) {
-            echo '<div class="btn-holder"><a href="<?=base_url()?>artikel/tambah" class="button-tambah"><b>Tambah Artikel</b></a></div>';
+            echo '<div class="btn-holder"><a href="'.base_url().'artikel/tambah" class="button-tambah"><b>Tambah Artikel</b></a></div>';
           }
         ?>
         
@@ -137,7 +137,7 @@
                           <p class='judul'><b>".$key->judul."</b></p>
 				          <p class='penulis'>Dikirim oleh ".$key->publisher." pada ".$key->tgl_publish."</p>
 				          <hr class='hr-artikel'>
-				          <p class='tumb-artikel'>Salah satu jenis buah musiman yang sering dinantikan kehadirannya adalah buah kelengkeng atau lengkeng. Buah ini terkenal karena rasanya yang manis dan berair, buah kelengkeng sebenarnya masuk dalam keluarga</p>
+				          <p class='tumb-artikel'>".$key->artikel_tumb."...</p>
                         </a>
                     </div>";
               }
@@ -145,58 +145,61 @@
           ?>
     </div>
 
-    <!-- Dokter -->
-    <div class="col-sm-3 col-xs-12 wowload fadeInRight">
-        <h5 class="judul-tab judul-center">Artikel</h5>
+    <!-- Artikel -->
+    <div class="col-sm-3 col-xs-12 partners  wowload fadeInLeft">
+        <h5 class="judul-tab judul-center">Artikel Terpopuler</h5>
         <hr class="hr-underline">
-        <ul class="nav nav-tabs">
-          <li class="active"><a href="#tab-terbaru">Terbaru</a></li>
-          <li><a href="#tab-populer">Populer</a></li>
-        </ul>
-
-        <div class="tab-content">
-          <div id="tab-terbaru" class="tab-pane fade in active">
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-             Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
-          </div>
-          <div id="tab-populer" class="tab-pane fade">
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="assets/user/images/img.png">
+          </a>
+          <div class="media-body">
+            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
+            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
           </div>
         </div>
+
+         <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="assets/user/images/img.png">
+          </a>
+          <div class="media-body">
+            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
+            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
+          </div>
+        </div>
+
+         <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="assets/user/images/img.png">
+          </a>
+          <div class="media-body">
+            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
+            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
+          </div>
+        </div>
+
+         <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="assets/user/images/img.png">
+          </a>
+          <div class="media-body">
+            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
+            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
+          </div>
+        </div>
+
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object" src="assets/user/images/img.png">
+          </a>
+          <div class="media-body">
+            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
+            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai...</p>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary">Lihat Selengkapnya</button>
     </div>
   </div>
 </div>

@@ -114,7 +114,8 @@
         <h5 class="judul-tab judul-center">Tambah Artikel</h5>
         <hr class="hr-underline">
         <form method="post" action="<?=base_url()?>artikel/in">
-          <input type="text" name="judul" placeholder="Judul" style="width: 100%; margin-bottom: 20px;"></input>
+          <input type="text" name="judul" placeholder="Judul" style="width: 100%; margin-bottom: 10px;"></input>
+          <textarea name="tumb" maxlength="200" style="width: 100%; height: 100; margin-bottom: 10px" placeholder="Masukkan 200 huruf pertama"></textarea>
           <textarea id="summernote" name="news_detail" style="width: 100%; height: 300;"></textarea>
           <button>SUBMIT</button>
         </form>

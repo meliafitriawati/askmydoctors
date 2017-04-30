@@ -70,8 +70,8 @@
             <div class="navbar-collapse  collapse">
               <ul class="nav navbar-nav navbar-right scroll">
                  <li ><a href="<?=base_url()?>">Home</a></li>
-                 <li class="active"><a href="<?=base_url()?>diskusi">Diskusi</a></li>
-                 <li ><a href="<?=base_url()?>artikel">Artikel</a></li>
+                 <li ><a href="<?=base_url()?>diskusi">Diskusi</a></li>
+                 <li class="active"><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li ><a href="<?=base_url()?>dokter">Dokter</a></li>
                  <?php 
                   if ($this->session->userdata('hak_akses')) {
@@ -79,7 +79,9 @@
                     switch ($kode) {
                       case '1':
                         break;
-                      case '2': echo "<li ><a href='".base_url()."dokter/profil/".$key->username."'>Dr. ".$this->session->userdata('nama_dokter')."</a></li>";
+                      case '2': 
+                        $username = $this->session->userdata('username');
+                        echo "<li ><a href='".base_url()."dokter/profil/".$username."'>Dr. ".$this->session->userdata('nama_dokter')."</a></li>";
                         break;
                       case '3': echo "<li ><a href='#'>".$this->session->userdata('nama_pengguna')."</a></li>";echo "<li><a href='".base_url()."diskusi' class='menu-button'><b>Tanya Dokter</b></a></li>";
                         break;
@@ -87,8 +89,10 @@
                         break;
                      } 
                   }else{
-                    echo "<li><a href='".base_url()."diskusi' class='menu-button'><b>Tanya Dokter</b></a></li>"; 
+                    echo "<li><a href='".base_url()."diskusi' class='menu-button'><b>Tanya Dokter</b></a></li>";
+                        
                   }
+
 
                    if (!$this->session->userdata('hak_akses')) {
                       $url = "<li><a href='".base_url()."login' class='menu-button'><b>Login</b></a></li>";

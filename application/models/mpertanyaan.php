@@ -24,6 +24,14 @@ class Mpertanyaan extends CI_model{
         return $this->db->get(); 
     }
 
+    function getKomentarP($id){
+        $this->db->select('*');
+        $this->db->from('tb_komentar');
+        $this->db->where('id_diskusi',$id);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
     function tambahPertanyaan($data){
         $this->db->insert('tb_diskusi', $data);
         $insert_id = $this->db->insert_id();

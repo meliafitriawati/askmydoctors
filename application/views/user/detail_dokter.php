@@ -82,6 +82,9 @@
                       default:
                         break;
                      } 
+                  }else{
+                    echo "<li><a href='".base_url()."diskusi' class='menu-button'><b>Tanya Dokter</b></a></li>";
+                        
                   }
 
 

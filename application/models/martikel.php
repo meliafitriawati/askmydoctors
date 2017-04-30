@@ -23,4 +23,12 @@ class Martikel extends CI_model{
             return $query->result();
         }
     }
+
+    function tambahView($id){
+        $this->db->set('view', 'view+1', FALSE);
+        $this->db->where('id_artikel',$id);
+        $this->db->update('tb_artikel');
+
+        return TRUE;
+    }
 }

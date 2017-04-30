@@ -30,6 +30,16 @@ class Diskusi extends REST_Controller {
         }
     }
 
+    public function getKomentar_get($id){
+        $id = $id;
+        $komentar = $this->mpertanyaan->getKomentarP($id);
+        if ($komentar) {    
+            $this->response(array('komentar'=>$komentar, 'status'=>1));
+        }else{
+            $this->response(array('error'=>'server error', 'status'=>0));
+        }
+    }
+
     public  function getDetailPertanyaan_get($id){
         $id = $id;
         $detail = $this->mpertanyaan->getDetailPertanyaan($id);

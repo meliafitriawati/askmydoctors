@@ -1,3 +1,9 @@
+<?php
+  $id = $this->uri->segment(3);
+  $this->load->model('martikel'); 
+  $this->martikel->tambahView($id);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,6 +125,7 @@
 				if ($detail != null) {
 					foreach ($detail as $key) {
 						echo "<h4 class='judul-artikel'><b>".$key->judul."</b></h4>
+                  <p class='nama'>Dikirim oleh ".$key->publisher." | ".$key->tgl_publish."</p>
 						        <hr class='hr-underline'>
 						        <div class='detail-pertanyaan'>
 						      <div class='detail-artikel-hold'>";
