@@ -70,9 +70,61 @@
             <div class="navbar-collapse  collapse">
               <ul class="nav navbar-nav navbar-right scroll">
                  <li ><a href="<?=base_url()?>">Home</a></li>
-                 <li ><a href="<?=base_url()?>diskusi">Diskusi</a></li>
-                 <li class="active"><a href="<?=base_url()?>artikel">Artikel</a></li>
+                 <li class="active"><a href="<?=base_url()?>diskusi">Diskusi</a></li>
+                 <li ><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li ><a href="<?=base_url()?>dokter">Dokter</a></li>
+                 <?php
+                  $kode = $this->session->userdata('hak_akses');
+                  $username = $this->session->userdata('username');
+                  switch ($kode) {
+                    case '2': 
+                    $this->db->from("tb_diskusi");
+                    $this->db->where("status", "BELUM TERJAWAB");
+                    $count = $this->db->count_all_results();
+
+                    $query = $this->db->query('SELECT * FROM tb_diskusi WHERE status="BELUM TERJAWAB"');
+                    $result = $query->result();
+                       echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                        </span></button>
+                            <div class="dropdown-content">';
+                              foreach ($result as $key) {
+                                echo '<a href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'">'.$key->judul.'</a>';
+                              }
+                            echo '</div></div></li>';
+                      break;
+                    case '3':
+                    $this->db->from("tb_notif_diskusi");
+                    $this->db->where("penerima", $username);
+                    $this->db->where("status", "NOT");
+
+                    $count = $this->db->count_all_results();
+
+                    $query = $this->db->query('SELECT * FROM tb_notif_diskusi WHERE penerima="'.$username.'" AND status="NOT"');
+                    $result = $query->result();
+
+                    if ($count != 0) {
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                        </span></button>
+                            <div class="dropdown-content">';
+                              foreach ($result as $key) {
+                                echo '<a onclick="readNotif('. $key->id_notif .')">'.$key->komentar.'</a>';
+                              }
+                            echo '</div></div></li>';
+                    }else{
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">0
+                        </span></button>
+                            <div class="dropdown-content">';
+                              echo "<center>NO NOTIFICATION</center>";
+                            echo '</div></div></li>';
+                    }    
+                      break;
+                    default:
+                      break;
+                   } 
+                ?>
                  <?php 
                   if ($this->session->userdata('hak_akses')) {
                     $kode = $this->session->userdata('hak_akses');
@@ -116,7 +168,7 @@
 
 </div>
 
-<div id="pertanyaan" class="container spacer ">
+<div id="pertanyaan" class="container spacer" style="min-height: 415px;">
   <div class="clearfix">
 
     <!-- Daftar Pertanyaan -->
@@ -124,14 +176,13 @@
         <h5 class="judul-tab pg-pertanyaan">Detail Pertanyaan</h5>
         <hr class="hr-underline">
         <div class="detail-pertanyaan">
-          <div class="img-hold"><img class="img-profile" src="<?=base_url()?>assets/user/images/img.png"></div>
-          <div class="detail-pertanyaan-hold">
           <?php
             if ($detail != null) {
               foreach ($detail as $key) {
                 $tanggal = $key->waktu_kirim;
                 $tgl = date("d/m/y H:i", strtotime($tanggal));
 
+                echo "<div class='img-hold'><img class='img-profile' src='".base_url()."assets/img/user/".$key->img_user."'></div><div class='detail-pertanyaan-hold'>";
                 echo "<p class='judul'><b>".$key->judul."</b></p>
                       <p class='tumb-pertanyaan'>".$key->pertanyaan."</p>
                       <p class='nama'>oleh ".$key->fullname." | ".$tgl."</p>";
@@ -173,46 +224,41 @@
         </ul>
 
         <div class="tab-content">
-          <div id="tab-terbaru" class="tab-pane fade in active">
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-             Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Mengapa setiap kali menstruasi saya sakit perut?<br>
-              <p class="pengirim-pertanyaan">Dikirim oleh Melia Fitriawati</p>
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
+            <div id="tab-terbaru" class="tab-pane fade in active">
+            <?php
+              $i = 0;
+              if ($pertanyaan_new != null) {
+                foreach ($pertanyaan_new as $key) {
+                  $myStr = $key->pertanyaan;
+                  
+                  if (strlen($myStr)>15) {
+                    $myStr = substr($key->pertanyaan, 0, 50) ." ...";
+                  }
+
+                  echo '<a class="link-artikel" href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'"><div class="tab-pertanyaan col-sm-12">
+                    <b>'.$key->judul.'</b><br>
+                    '.$myStr.'
+                    <p style="margin-top:0px" class="pengirim-pertanyaan">Dikirim oleh '.$key->pengirim.'</p>
+                  </div></a>';
+                  if (++$i == 5) break;
+                }
+              }
+            ?>
           </div>
           <div id="tab-populer" class="tab-pane fade">
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines?
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
+            <?php
+              $i = 0;
+              if ($pertanyaan_most != null) {
+                foreach ($pertanyaan_most as $key) {
+                  echo '<a class="link-artikel" href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'"><div class="tab-pertanyaan col-sm-12">
+                    <b>'.$key->judul.'</b><br>
+                    '.$myStr.'
+                    <p style="margin-top:0px" class="pengirim-pertanyaan">Dikirim oleh '.$key->pengirim.'</p>
+                  </div></a>';
+                  if (++$i == 5) break;
+                }
+              }
+            ?>
           </div>
         </div>
     </div>

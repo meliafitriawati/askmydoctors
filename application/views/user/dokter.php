@@ -67,6 +67,59 @@
                  <li ><a href="<?=base_url()?>diskusi">Diskusi</a></li>
                  <li ><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li class="active"><a href="<?=base_url()?>dokter">Dokter</a></li>
+                 <?php
+                  $kode = $this->session->userdata('hak_akses');
+                  $username = $this->session->userdata('username');
+                  switch ($kode) {
+                   case '2': 
+                      $this->db->from("tb_diskusi");
+                      $this->db->where("status", "BELUM TERJAWAB");
+                      $count = $this->db->count_all_results();
+
+                      $query = $this->db->query('SELECT * FROM tb_diskusi WHERE status="BELUM TERJAWAB"');
+                      $result = $query->result();
+                         echo '<li><div class="dropdown">
+                              <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                          </span></button>
+                              <div class="dropdown-content">';
+                                foreach ($result as $key) {
+                                  echo '<a href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'">'.$key->judul.'</a>';
+                                }
+                              echo '</div></div></li>';
+                      break;
+                    case '3':
+                    $this->db->from("tb_notif_diskusi");
+                    $this->db->where("penerima", $username);
+                    $this->db->where("status", "NOT");
+
+                    $count = $this->db->count_all_results();
+
+                    $query = $this->db->query('SELECT * FROM tb_notif_diskusi WHERE penerima="'.$username.'" AND status="NOT"');
+                    $result = $query->result();
+
+                    if ($count != 0) {
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                        </span></button>
+                            <div class="dropdown-content">';
+                              foreach ($result as $key) {
+                                echo '<a onclick="readNotif('. $key->id_notif .')">'.$key->komentar.'</a>';
+                              }
+                            echo '</div></div></li>';
+                    }else{
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">0
+                        </span></button>
+                            <div class="dropdown-content">';
+                              echo "<center>NO NOTIFICATION</center>";
+                            echo '</div></div></li>';
+                    }    
+                      break;
+                    default:
+                      break;
+                   } 
+                ?>
+                
                  <?php 
                   if ($this->session->userdata('hak_akses')) {
                     $kode = $this->session->userdata('hak_akses');
@@ -110,7 +163,7 @@
 
 </div>
 
-<div id="pertanyaan" class="container spacer ">
+<div id="pertanyaan" class="container spacer" style="min-height: 415px;">
   <div class="clearfix">
 
     <!-- Diskusi -->
@@ -122,7 +175,7 @@
               foreach ($dokter as $key) {
                 echo "<div class='list-dokter-sc col-sm-2'>
                         <a href='".base_url()."dokter/profil/".$key->username."'>
-                          <img class='dokter-prof' src='".base_url()."assets/user/images/img.png'>
+                          <img class='dokter-prof' style='width: 40%' src='".base_url()."assets/img/dokter/".$key->image."'>
                           <p class='nama-dokter'><b>".$key->fullname."</b></p>
                           <p class='spesialisasi-dokter'>Spesialis ".$key->nama_spesialisasi."</p>
                         </a>
@@ -138,7 +191,7 @@
 
 <!-- Footer Starts -->
 <div class="footer text-center spacer">
-<p class="wowload flipInX"><a href="#"><i class="fa fa-facebook fa-2x"></i></a> <a href="#"><i class="fa fa-dribbble fa-2x"></i></a> <a href="#"><i class="fa fa-twitter fa-2x"></i></a> <a href="#"><i class="fa fa-linkedin fa-2x"></i></a> </p>
+<p class="wowload flipInX"><a href="#"><i class="fa fa-facebook fa-2x"></i></a> <a href="#"><i class="fa fa-dribbble fa-2x"></i></a><a href="#"><i class="fa fa-twitter fa-2x"></i></a> <a href="#"><i class="fa fa-linkedin fa-2x"></i></a></p>
 Ask My Doctor
 </div>
 <!-- # Footer Ends -->

@@ -23,6 +23,8 @@
   <link rel="shortcut icon" href="<?=base_url()?>assets/user/images/icon.png" type="image/x-icon">
   <link rel="icon" href="<?=base_url()?>assets/user/images/icon.png" type="image/x-icon">
 
+  <!-- image area -->
+  <script type="text/javascript" src="<?=base_url()?>assets/user/assets/js/jquery.imgareaselect.pack.js"></script>
 
   <link rel="stylesheet" href="<?=base_url()?>assets/user/assets/style.css">
 
@@ -63,6 +65,58 @@
                  <li ><a href="<?=base_url()?>diskusi">Diskusi</a></li>
                  <li class="active"><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li ><a href="<?=base_url()?>dokter">Dokter</a></li>
+                 <?php
+                  $kode = $this->session->userdata('hak_akses');
+                  $username = $this->session->userdata('username');
+                  switch ($kode) {
+                    case '2': 
+                      $this->db->from("tb_diskusi");
+                      $this->db->where("status", "BELUM TERJAWAB");
+                      $count = $this->db->count_all_results();
+
+                      $query = $this->db->query('SELECT * FROM tb_diskusi WHERE status="BELUM TERJAWAB"');
+                      $result = $query->result();
+                         echo '<li><div class="dropdown">
+                              <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                          </span></button>
+                              <div class="dropdown-content">';
+                                foreach ($result as $key) {
+                                  echo '<a href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'">'.$key->judul.'</a>';
+                                }
+                              echo '</div></div></li>';
+                      break;
+                    case '3':
+                      $this->db->from("tb_notif_diskusi");
+                      $this->db->where("penerima", $username);
+                      $this->db->where("status", "NOT");
+
+                      $count = $this->db->count_all_results();
+
+                      $query = $this->db->query('SELECT * FROM tb_notif_diskusi WHERE penerima="'.$username.'" AND status="NOT"');
+                      $result = $query->result();
+
+                      if ($count != 0) {
+                        echo '<li><div class="dropdown">
+                              <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                          </span></button>
+                              <div class="dropdown-content">';
+                                foreach ($result as $key) {
+                                  echo '<a onclick="readNotif('. $key->id_notif .')">'.$key->komentar.'</a>';
+                                }
+                              echo '</div></div></li>';
+                      }else{
+                        echo '<li><div class="dropdown">
+                              <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">0
+                          </span></button>
+                              <div class="dropdown-content">';
+                                echo "<center>NO NOTIFICATION</center>";
+                              echo '</div></div></li>';
+                      }    
+                        break;
+                    default:
+                      break;
+                   } 
+                ?>
                  <?php 
                   if ($this->session->userdata('hak_akses')) {
                     $kode = $this->session->userdata('hak_akses');
@@ -108,15 +162,18 @@
 
 <div id="pertanyaan" class="container spacer ">
   <div class="clearfix">
-
     <!-- Diskusi -->
     <div class="col-sm-12 col-xs-12 partners  wowload fadeInLeft">
         <h5 class="judul-tab judul-center">Tambah Artikel</h5>
         <hr class="hr-underline">
-        <form method="post" action="<?=base_url()?>artikel/in">
-          <input type="text" name="judul" placeholder="Judul" style="width: 100%; margin-bottom: 10px;"></input>
-          <textarea name="tumb" maxlength="200" style="width: 100%; height: 100; margin-bottom: 10px" placeholder="Masukkan 200 huruf pertama"></textarea>
-          <textarea id="summernote" name="news_detail" style="width: 100%; height: 300;"></textarea>
+        <form method="post" action="<?=base_url()?>artikel/in" enctype="multipart/form-data">
+          <input type="text" name="judul" placeholder="Judul" style="width: 100%; margin-bottom: 10px;" required="required"></input>
+          
+          <textarea name="tumb" maxlength="200" style="width: 100%; height: 100; margin-bottom: 10px" placeholder="Masukkan 200 huruf pertama" required="required"></textarea>
+          
+          <input type="file" class="form-control" name="foto_artikel" id="foto_artikel" placeholder="Foto" style="margin-bottom: 10px" required="required">
+          
+          <textarea id="summernote" name="news_detail" style="width: 100%; height: 300;" required="required"></textarea>
           <button>SUBMIT</button>
         </form>
         <!-- <button type="button" class="btn btn-primary">Lihat Selengkapnya</button> -->

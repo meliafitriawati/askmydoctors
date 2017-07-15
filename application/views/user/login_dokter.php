@@ -83,7 +83,7 @@
 
 </div>
 
-<div id="pertanyaan" class="container spacer ">
+<div id="pertanyaan" class="container spacer">
   <div class="clearfix">
 
     <!-- Artikel -->
@@ -100,8 +100,14 @@
               <input class="form-control" placeholder="Password" type="password" name="password">
             </div>
             <div class="row">
-              <div class="col-xs-8">
-              </div>
+              <div class="col-xs-8" style="color: red">
+                <?php
+                  $info = $this->session->flashdata('info');
+                  if(!empty($info)){
+                    echo $info;
+                  }
+                ?>  
+            </div>
               <!-- /.col -->
               <div class="col-xs-4">
                 <button type="submit" class="btn btn-primary btn-block btn-flat">Login</button>

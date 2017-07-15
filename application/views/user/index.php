@@ -69,6 +69,58 @@
                  <li ><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li ><a href="<?=base_url()?>dokter">Dokter</a></li>
                  
+                 <?php
+                  $kode = $this->session->userdata('hak_akses');
+                  $username = $this->session->userdata('username');
+                  switch ($kode) {
+                    case '2': 
+                      $this->db->from("tb_diskusi");
+                      $this->db->where("status", "BELUM TERJAWAB");
+                      $count = $this->db->count_all_results();
+
+                      $query = $this->db->query('SELECT * FROM tb_diskusi WHERE status="BELUM TERJAWAB"');
+                      $result = $query->result();
+                         echo '<li><div class="dropdown">
+                              <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                          </span></button>
+                              <div class="dropdown-content">';
+                                foreach ($result as $key) {
+                                  echo '<a href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'">'.$key->judul.'</a>';
+                                }
+                              echo '</div></div></li>';
+                      break;
+                    case '3':
+                    $this->db->from("tb_notif_diskusi");
+                    $this->db->where("penerima", $username);
+                    $this->db->where("status", "NOT");
+
+                    $count = $this->db->count_all_results();
+
+                    $query = $this->db->query('SELECT * FROM tb_notif_diskusi WHERE penerima="'.$username.'" AND status="NOT"');
+                    $result = $query->result();
+
+                    if ($count != 0) {
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">'.$count.'
+                        </span></button>
+                            <div class="dropdown-content">';
+                              foreach ($result as $key) {
+                                echo '<a onclick="readNotif('. $key->id_notif .')">'.$key->komentar.'</a>';
+                              }
+                            echo '</div></div></li>';
+                    }else{
+                      echo '<li><div class="dropdown">
+                            <button class="dropbtn"><span class="bubble" id="jumlah_pesanan">0
+                        </span></button>
+                            <div class="dropdown-content">';
+                              echo "<center>NO NOTIFICATION</center>";
+                            echo '</div></div></li>';
+                    }    
+                      break;
+                    default:
+                      break;
+                   } 
+                ?>
 
                  <?php 
                   if ($this->session->userdata('hak_akses')) {
@@ -140,7 +192,7 @@
             		<div class="caption-info">
                   <!-- <img src="images/logobig.png" class="animated bounceInUp" alt="logo"> -->
                   <h2 class="animated bounceInLeft">Ask My Doctors</h2>
-                  <p class="animated bounceInRight">Konsultasi Kesehatan Online Dengan Dokter</p>
+                  <p class="animated bounceInRight">Menghubungkan dokter dan pasien dengan mudah</p>
                   <!-- <input placeholder="Search" type="text" class="search-box">
                   <div class="scroll animated fadeInUp"><a href="#works" class="btn btn-default"><i class="fa fa-flask"></i>Search</a> 
                   </div> -->
@@ -158,7 +210,7 @@
             		<div class="caption-info">
                   <!-- <img src="images/logobig.png" class="animated bounceInUp" alt="logo"> -->
                   <h2 class="animated bounceInLeft">Ask My Doctors</h2>
-                  <p class="animated bounceInRight">Konsultasi Kesehatan Online Dengan Dokter</p>
+                  <p class="animated bounceInRight">Mudah & Gratis untuk di gunakan</p>
                   <!-- <input placeholder="Search" type="text" class="search-box">
                   <div class="scroll animated fadeInUp"><a href="#works" class="btn btn-default"><i class="fa fa-flask"></i>Search</a> 
                   </div> -->
@@ -176,7 +228,7 @@
             		<div class="caption-info">
                   <!-- <img src="images/logobig.png" class="animated bounceInUp" alt="logo"> -->
                   <h2 class="animated bounceInLeft">Ask My Doctors</h2>
-                  <p class="animated bounceInRight">Konsultasi Kesehatan Online Dengan Dokter</p>
+                  <p class="animated bounceInRight">Menghubungkan dokter dengan pasien dengan mudah</p>
                   <!-- <input placeholder="Search" type="text" class="search-box">
                   <div class="scroll animated fadeInUp"><a href="#works" class="btn btn-default"><i class="fa fa-flask"></i>Search</a> 
                   </div> -->
@@ -192,64 +244,41 @@
 <!-- #Slider Ends -->
 </div>
 
-<div id="partners" class="container spacer ">
+<div id="partners" class="container spacer" style="min-height: 415px;">
   <div class="clearfix">
 
     <!-- Artikel -->
     <div class="col-sm-3 col-xs-12 partners  wowload fadeInLeft">
         <h5 class="judul-tab judul-center">Artikel Terbaru</h5>
         <hr class="hr-underline">
-        <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="assets/user/images/img.png">
-          </a>
-          <div class="media-body">
-            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
-            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
-          </div>
-        </div>
+        <?php
+        $i = 0;
+        if ($artikel != null) {
+            foreach ($artikel as $key) {
+            $myStr = $key->artikel_tumb;
+            $id = $key->id_artikel;
+            $url = base_url() ."artikel/detail/". $id;
 
-         <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="assets/user/images/img.png">
-          </a>
-          <div class="media-body">
-            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
-            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
-          </div>
-        </div>
-
-         <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="assets/user/images/img.png">
-          </a>
-          <div class="media-body">
-            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
-            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
-          </div>
-        </div>
-
-         <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="assets/user/images/img.png">
-          </a>
-          <div class="media-body">
-            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
-            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai ...</p>
-          </div>
-        </div>
-
-        <div class="media">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="assets/user/images/img.png">
-          </a>
-          <div class="media-body">
-            <h6 class="media-heading">11 Manfaat Jus Mangga</h6>
-            <p>Siapa sih yang tidak kenal dengan buah mangga? Buah yang dianggap sebagai...</p>
-          </div>
-        </div>
-
-        <button type="button" class="btn btn-primary">Lihat Selengkapnya</button>
+            if (strlen($myStr)>15) {
+              $myStr = substr($key->artikel_tumb, 0, 80) ."...";
+            }
+            echo '<div class="media">
+              <a href="'.$url.'" class="pull-left">
+                <img class="media-object" src="assets/img/artikel/'.$key->img_tumb.'">
+              </a>
+              <a class="link-artikel" href="'.$url.'">
+                <div class="media-body">
+                  <h6 class="media-heading">'.$key->judul.'</h6>
+                  <p>'.$myStr.'</p>
+                </div>
+              </a>
+            </div>';
+            if (++$i == 5) break;
+          }
+        }
+        ?>
+        
+        <a href="<?=base_url()?>artikel" class="btn btn-primary">Lihat Selengkapnya</a>
     </div>
 
     <!-- Diskusi -->
@@ -263,50 +292,39 @@
 
         <div class="tab-content">
           <div id="tab-terbaru" class="tab-pane fade in active">
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?  
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?  
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
+            <?php
+              $i = 0;
+              if ($pertanyaan_new != null) {
+                  foreach ($pertanyaan_new as $key) {
+                  $myStr = $key->pertanyaan;
+                  
+                  if (strlen($myStr)>15) {
+                    $myStr = substr($key->pertanyaan, 0, 200) ."...";
+                  }
+
+                    echo '<a class="link-artikel" href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'"><div class="tab-pertanyaan col-sm-12"><b>'.$key->judul.'</b><br><hr class="hr-question">'.$myStr.'</div></a>';
+                    if (++$i == 5) break;
+                }
+              }
+            ?>
+            
           </div>
           <div id="tab-populer" class="tab-pane fade">
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <div class="tab-pertanyaan col-sm-12">
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ?
-              Is that possible to control my cholesterol level without medicines ? Doing daily workout and consuming more fruits can help me to lower the cholesterol level of my body ? 
-            </div>
-            <button type="button" class="btn btn-primary btn-diskusi">Lihat Selengkapnya</button>
+            <?php
+              $i = 0;
+              if ($pertanyaan_most != null) {
+                 foreach ($pertanyaan_most as $key) {
+                  $myStr = $key->pertanyaan;
+                  
+                  if (strlen($myStr)>15) {
+                    $myStr = substr($key->pertanyaan, 0, 200) ."...";
+                  }
+
+                    echo '<a class="link-artikel" href="'.base_url().'pertanyaan/detail/'.$key->id_diskusi.'"><div class="tab-pertanyaan col-sm-12"><b>'.$key->judul.'</b><br><hr class="hr-question">'.$myStr.'</div></a>';
+                    if (++$i == 5) break;
+                }
+              }
+            ?>
           </div>
         </div>
     </div>
@@ -315,26 +333,20 @@
     <div class="col-sm-3  wowload fadeInRight">
         <h5 class="judul-tab judul-center">Dokter</h5>
         <hr class="hr-underline">
-        <div class="list-dokter">
-          <img class="dokter-img" src="assets/user/images/img.png">
-          <p class="nama-dokter"><b>Dr. Martha Kurnia K</b></p>
-          <p class="spesialisasi-dokter">Spesialis Bedah Saraf</p>
-        </div>
-        <div class="list-dokter">
-          <img class="dokter-img" src="assets/user/images/img.png">
-          <p class="nama-dokter"><b>Dr. Martha Kurnia K</b></p>
-          <p class="spesialisasi-dokter">Spesialis Bedah Saraf</p>
-        </div>
-        <div class="list-dokter">
-          <img class="dokter-img" src="assets/user/images/img.png">
-          <p class="nama-dokter"><b>Dr. Martha Kurnia K</b></p>
-          <p class="spesialisasi-dokter">Spesialis Bedah Saraf</p>
-        </div>
-        <div class="list-dokter">
-          <img class="dokter-img" src="assets/user/images/img.png">
-          <p class="nama-dokter"><b>Dr. Martha Kurnia K</b></p>
-          <p class="spesialisasi-dokter">Spesialis Bedah Saraf</p>
-        </div>
+        <?php
+          $i = 0;
+          if ($dokter != null) {
+                foreach ($dokter as $key) {
+                  echo '<a href="'.base_url().'dokter/profil/'.$key->username.'"><div class="list-dokter">
+                  <img class="dokter-img" style="width: 30%;" src="assets/img/dokter/'.$key->image.'">
+                  <p class="nama-dokter"><b>'.$key->fullname.'</b></p>
+                  <p class="spesialisasi-dokter">Spesialisasi '.$key->nama_spesialisasi.'</p>
+                </div></a>';
+                if (++$i == 3) break;
+            }
+          }
+        ?>
+        <a href="<?=base_url()?>dokter" class="btn btn-primary" style="margin-top: 10px">Lihat Selengkapnya</a>
     </div>
   </div>
 </div>
@@ -370,6 +382,26 @@ $(document).ready(function(){
         $(this).tab('show');
     });
 });
+
+function readNotif(id_notif) {
+    var id_notif = id_notif;
+
+    $.ajax({
+        async: true,
+        type: 'post',
+        url: '<?= base_url(); ?>pertanyaan/readNotif',
+        data: 'id_notif=' + id_notif,
+        dataType: 'json',
+        success: function (resp) {
+            if (resp.status == 1) {
+              var id_pertanyaan = resp.id_pertanyaan;
+              window.location.href = "pertanyaan/detail/" + id_pertanyaan;
+            } else {
+                $.bootstrapGrowl("Gagal mengirim notifikasi", {type: 'danger'});
+            }
+        }
+    });
+}
 </script>
 
 <!-- jquery -->
@@ -394,3 +426,12 @@ $(document).ready(function(){
 
 </body>
 </html>
+
+<style type="text/css">
+  .hr-question{
+    margin-top: 5px;
+    margin-bottom: 5px; 
+    border: 0;
+    border-top: 1px solid #eee;
+  }
+</style>

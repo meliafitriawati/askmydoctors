@@ -15,4 +15,5 @@ class Mdokter extends CI_model{
             return $query->result();
         }
     }
+
 }

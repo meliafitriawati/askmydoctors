@@ -13,7 +13,10 @@ class User extends REST_Controller {
     function login_user_post(){
     	$email = $this->input->post('email');
     	$password = md5($this->input->post('password'));
+        $token = $this->input->post('token');
+
         $result = $this->muser->get_user($email, $password);
+        $this->muser->updateTokenUser($email, $token);
         
         if($result){
             unset($result['password']);
@@ -30,8 +33,12 @@ class User extends REST_Controller {
     function login_dokter_post(){
     	$username = $this->input->post('username');
     	$password = md5($this->input->post('password'));
+        $token = $this->input->post('token');
+
         $result = $this->muser->get_dokter($username, $password);
         
+        $this->muser->updateTokenDokter($username, $token);
+
         if($result){
             unset($result['password']);
             $arr_result = array(
@@ -45,32 +52,36 @@ class User extends REST_Controller {
     }
 
     function register_post(){
-    	$data['username'] = $this->post('username');
-        $data['email'] = $this->post('email');
-        $data['cd_access'] = $this->post('cd_access');
-        $data['fname'] = $this->post('fname');
-        $data['lname'] = $this->post('lname');
+    	$data['username'] = $this->input->post('username');
+        $password = $this->input->post('password');
+        $data['email'] = $this->input->post('email');
+        $data['fullname'] = $this->input->post('fullname');
+        $data['gender'] = $this->input->post('gender');
 
-        if($this->usermodel->cek_user($data['username'])){
+        if($this->muser->cek_user($data['username']))
+        {
+            //echo $this->muser->cek_user($data['username']);
             $this->response(array("error" => "The username has been resgitered", "status" => 2));
+        }elseif($this->muser->cek_email($data['email']))
+        {
+            $this->response(array("error" => "The email has been resgitered", "status" => 3));
         }else{
-            $password = $this->post('password');
-            if(empty($data['username']) || empty('password') || empty($data['email']) || empty($data['cd_access'])  ){
-                $this->response(array("error" => "Invalid username or password", "status" => 0));
+            $data['password'] = md5($password);
+            $data['verified'] = 0;
+            $data['hak_akses'] = 3;
+            $data['img_user'] = "pic.png";
+            $result = $this->muser->dataRegister($data);
+
+            if($result){
+                $dataUser = $this->muser->get_user($data['email'], md5($password));
+                unset($dataUser['password']);
+                $this->response(array('user'=>$dataUser, 'status'=>1));
             }else{
-                $data['password'] = md5($password);
-                $data['status'] = 0;
-                $result = $this->usermodel->add_user($data);
-                if($result){
-                    $dataUser = $this->usermodel->get_user($data['username'], md5($password));
-                    unset($dataUser['password']);
-                    $this->response(array('user'=>$dataUser, 'status'=>1));
-                }else{
-                    $this->response(array('error'=>'server error', 'status'=>0));
-                }
+                $this->response(array('error'=>'server error', 'status'=>0));
             }
         }
     }
+
 
     protected function display_error_user_unauthorized(){
         $this->response(array("error" => "User is not found", "status" => 0));

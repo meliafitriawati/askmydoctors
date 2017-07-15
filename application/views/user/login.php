@@ -67,7 +67,6 @@
                  <li ><a href="<?=base_url()?>diskusi">Diskusi</a></li>
                  <li ><a href="<?=base_url()?>artikel">Artikel</a></li>
                  <li ><a href="<?=base_url()?>dokter">Dokter</a></li>
-                 <li ><a href="<?=base_url()?>login" class="menu-button"><b>Login</b></a></li>
                  <li ><a href="<?=base_url()?>diskusi" class="menu-button"><b>Tanya Dokter</b></a></li> 
               </ul>
             </div>
@@ -100,7 +99,13 @@
               <input class="form-control" placeholder="Password" name="password" type="password" required="required">
             </div>
             <div class="row">
-              <div class="col-xs-8">
+              <div class="col-xs-8" style="color: red">
+              <?php
+                $info = $this->session->flashdata('info');
+                if(!empty($info)){
+                  echo $info;
+                }
+              ?>
               </div>
               <!-- /.col -->
               <div class="col-xs-4">
@@ -112,7 +117,7 @@
 
           <div class="social-auth-links text-center">
             <p style="margin-bottom: 10px">- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> mendaftar menggunakan Google+</a>
+            <a href="<?=base_url()?>register" class="btn btn-block btn-flat btn-social btn-google">DAFTAR</a>
           </div>
           <!-- /.social-auth-links -->
           <a href="<?=base_url()?>login" style="line-height: 34px;">Lupa password?</a><br>
@@ -179,3 +184,14 @@ $(document).ready(function(){
 
 </body>
 </html>
+
+<style type="text/css">
+  .btn-social {
+    position: relative;
+    padding: 0.5em 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+</style>
